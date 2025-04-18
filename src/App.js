@@ -24,7 +24,7 @@ function App() {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.post("http://127.0.0.1:5000/generate-qa", formData);
+      const response = await axios.post("https://ai-interview-backend.vercel.app/api/interview-questions", formData);
       const fetchedQuestions = response.data.questions || [];
 
       // Make sure empty answers become "**"
