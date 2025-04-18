@@ -24,7 +24,7 @@ function App() {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.post("https://ai-interview-backend-qgn50dj17-rashi-guptas-projects-70e2be20.vercel.app/api/interview-questions", formData);
+      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/interview-questions`, formData);
       const fetchedQuestions = response.data.questions || [];
 
       // Make sure empty answers become "**"
