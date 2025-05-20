@@ -1,70 +1,85 @@
-# Getting Started with Create React App
+🧠 AI Interview Question Generator - InterQ
+AI Interview Generator is a smart, personalized interview preparation platform that dynamically generates role-specific interview questions and suggested answers using Gemini AI. It helps job seekers practice effectively with customized question sets based on job roles, experience, and skill level.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+🚀 Tech Stack
+Layer	Technology
+Frontend	React, Tailwind CSS
+Backend	Node.js, Express.js
+AI Engine	Gemini AI (Google)
+Database	MongoDB
 
-## Available Scripts
+✨ Key Features
+🎯 Job-role based question sets
 
-In the project directory, you can run:
+🤖 AI-generated sample answers using Gemini
 
-### `npm start`
+📊 Question difficulty selection (Easy/Medium/Hard)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+🔄 Dynamic follow-up and clarification questions
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+💾 Save sessions for later review
 
-### `npm test`
+🔐 Secure and scalable backend using Express and MongoDB
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+📁 Project Structure
+bash
+Copy code
+ai-interview-generator/
+├── backend/             # Express.js API
+│   ├── routes/          # All API routes
+│   ├── controllers/     # Business logic
+│   ├── services/        # Gemini AI integration logic
+│   ├── models/          # Mongoose schemas
+│   └── .env             # API keys & DB credentials (ignored)
+├── frontend/            # React + Tailwind UI
+│   └── src/
+│       └── components/  # Reusable React components
+│       └── pages/       # Page views
+├── .gitignore
+├── package.json
+└── README.md
+🧑‍💻 Getting Started
+1️⃣ Clone the repository
+bash
+Copy code
+git clone https://github.com/your-username/ai-interview-generator.git
+cd ai-interview-generator
+2️⃣ Backend Setup (Node.js + Express)
+bash
+Copy code
+cd backend
+npm install
+# Add your credentials in a `.env` file
+npm start
+Your backend will run on http://localhost:5000
 
-### `npm run build`
+3️⃣ Frontend Setup (React + Tailwind)
+bash
+Copy code
+cd frontend
+npm install
+npm run dev
+Frontend will run on http://localhost:5173
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+🔑 Environment Variables
+In the backend/.env file:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+env
+Copy code
+MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/interview-db
+GEMINI_API_KEY=your_gemini_api_key
+PORT=5000
+🔒 Make sure .env is listed in .gitignore.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+📬 API Endpoints (Sample)
+Method	Endpoint	Description
+POST	/api/generate	Generate questions using Gemini
+GET	/api/questions/:id	Fetch question set by ID
+POST	/api/save	Save a question-answer session
 
-### `npm run eject`
+📄 License
+MIT License © 2025 Rashi
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+🙋‍♀️ About the Creator
+Made with 💡 by Rashi
+GitHub @rashi-github06
