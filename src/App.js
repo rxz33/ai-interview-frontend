@@ -9,22 +9,33 @@ function App() {
     workExperience: "",
     topic: "",
     companyType: "",
-    difficulty: "", // ✅ NEW
+    difficulty: "",
   });
 
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [speakingUtterance, setSpeakingUtterance] = useState(null); // ✅ NEW
 
-  // ✅ TTS Function
-  const speak = (text) => {
+  const toggleSpeak = (text) => {
     const synth = window.speechSynthesis;
     if (!synth) return alert("Speech synthesis not supported in this browser.");
+
+    if (speakingUtterance) {
+      synth.cancel(); // Stop current speech
+      setSpeakingUtterance(null);
+      return;
+    }
+
     const utter = new SpeechSynthesisUtterance(text);
     utter.rate = 1;
     utter.pitch = 1;
     utter.lang = "en-US";
+
+    utter.onend = () => setSpeakingUtterance(null);
+
     synth.speak(utter);
+    setSpeakingUtterance(utter);
   };
 
   useEffect(() => {
@@ -99,7 +110,7 @@ function App() {
                 required
                 style={{
                   padding: "14px", borderRadius: "12px", border: "2px solid #3498db", backgroundColor: "#f4f9fc",
-                  color: "#2c3e50", fontSize: "16px", transition: "border 0.3s ease"
+                  color: "#2c3e50", fontSize: "16px"
                 }}
               />
             </React.Fragment>
@@ -127,7 +138,7 @@ function App() {
             disabled={loading}
             style={{
               backgroundColor: "#3498db", color: "#ffffff", padding: "14px", border: "none", borderRadius: "12px",
-              cursor: "pointer", fontWeight: "bold", fontSize: "18px", transition: "background-color 0.3s ease"
+              cursor: "pointer", fontWeight: "bold", fontSize: "18px"
             }}
           >
             {loading ? <RingLoader size={30} color={"#ffffff"} /> : "Generate Questions"}
@@ -154,15 +165,15 @@ function App() {
             }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <span><strong>Q:</strong> {qa.question}</span>
-                <button onClick={() => speak(qa.question)} title="Listen to Question" style={{ background: "none", border: "none", cursor: "pointer", fontSize: "18px", color: "#3498db" }}>
-                  🔊
-                </button>
+                <button onClick={() => toggleSpeak(qa.question)} title="Play/Stop Question" style={{
+                  background: "none", border: "none", cursor: "pointer", fontSize: "18px", color: "#3498db"
+                }}>🔊</button>
               </div>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "6px" }}>
                 <span><strong>A:</strong> {qa.answer}</span>
-                <button onClick={() => speak(qa.answer)} title="Listen to Answer" style={{ background: "none", border: "none", cursor: "pointer", fontSize: "18px", color: "#3498db" }}>
-                  🔊
-                </button>
+                <button onClick={() => toggleSpeak(qa.answer)} title="Play/Stop Answer" style={{
+                  background: "none", border: "none", cursor: "pointer", fontSize: "18px", color: "#3498db"
+                }}>🔊</button>
               </div>
             </li>
           ))}
