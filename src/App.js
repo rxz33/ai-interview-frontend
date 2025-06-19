@@ -20,25 +20,34 @@ function App() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await axios.post("https://ai-interview-backend-5es5.onrender.com/api/interview-questions", formData);
-      const fetchedQuestions = response.data.questions || [];
+  e.preventDefault();
+  setLoading(true);
+  setError(null);
+  try {
+    const response = await axios.post("https://ai-interview-backend-5es5.onrender.com/api/interview-questions", formData);
 
-      // Make sure empty answers become "**"
-      const updatedQuestions = fetchedQuestions.map((qa) => ({
-        question: qa.question || "",
-        answer: qa.answer && qa.answer.trim() !== "" ? qa.answer : "**",
-      }));
+    const fetchedQuestions = response.data.questions || [];
 
-      setQuestions(updatedQuestions);
-    } catch (err) {
-      setError("Failed to generate questions. Please try again.");
+    // Make sure empty answers become "**"
+    const updatedQuestions = fetchedQuestions.map((qa) => ({
+      question: qa.question || "",
+      answer: qa.answer && qa.answer.trim() !== "" ? qa.answer : "**",
+    }));
+
+    setQuestions(updatedQuestions);
+  } catch (err) {
+    console.error("❌ Request failed:", err);
+
+    if (err.response?.status === 503) {
+      setError("⚠️ Gemini API quota exceeded. Please try again in a few minutes.");
+    } else if (err.response?.status === 500) {
+      setError("⚠️ Internal server error. Try again later or check your inputs.");
+    } else {
+      setError("⚠️ Something went wrong. Please try again.");
     }
-    setLoading(false);
-  };
+  }
+  setLoading(false);
+};
 
   return (
     <div style={{ backgroundColor: "#f7f9fc", minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
