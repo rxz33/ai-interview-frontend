@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { RingLoader } from 'react-spinners';
-import './App.css'; // Ensure this is at the top
+import './App.css';
 
 function App() {
   const [formData, setFormData] = useState({
@@ -15,39 +15,43 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // ✅ Ping backend on first load (prevents cold start delay)
+  useEffect(() => {
+    axios.get("https://interq-groq.onrender.com/health")
+      .then(() => console.log("✅ Backend warm-up done"))
+      .catch((err) => console.warn("⚠️ Backend warm-up failed", err));
+  }, []);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
-  setError(null);
-  try {
-    const response = await axios.post("https://interq-groq.onrender.com/api/interview-questions", formData);
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await axios.post("https://interq-groq.onrender.com/api/interview-questions", formData);
+      const fetchedQuestions = response.data.questions || [];
 
-    const fetchedQuestions = response.data.questions || [];
+      const updatedQuestions = fetchedQuestions.map((qa) => ({
+        question: qa?.question?.trim() || "**Question missing**",
+        answer: qa?.answer?.trim() || "**Answer missing**",
+      }));
 
-    // Make sure empty answers become "**"
-    const updatedQuestions = fetchedQuestions.map((qa) => ({
-      question: qa.question || "",
-      answer: qa.answer && qa.answer.trim() !== "" ? qa.answer : "**",
-    }));
-
-    setQuestions(updatedQuestions);
-  } catch (err) {
-    console.error("❌ Request failed:", err);
-
-    if (err.response?.status === 503) {
-      setError("⚠️ Backend is unavailable. Possibly Groq API error or rate limit. Please try again shortly.");
-    } else if (err.response?.status === 500) {
-      setError("⚠️ Internal server error. Try again later or check your inputs.");
-    } else {
-      setError("⚠️ Something went wrong. Please try again.");
+      setQuestions(updatedQuestions);
+    } catch (err) {
+      console.error("❌ Request failed:", err);
+      if (err.response?.status === 503) {
+        setError("⚠️ Backend is waking up or busy. Please wait a few seconds and try again.");
+      } else if (err.response?.status === 500) {
+        setError("⚠️ Internal server error. Try again later or check your inputs.");
+      } else {
+        setError("⚠️ Something went wrong. Please try again.");
+      }
     }
-  }
-  setLoading(false);
-};
+    setLoading(false);
+  };
 
   return (
     <div style={{ backgroundColor: "#f7f9fc", minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
@@ -65,64 +69,32 @@ function App() {
           }}>
             AI-Powered Interview Question Generator
           </span>
-        </h1> 
-        
-
+        </h1>
 
         <form onSubmit={handleSubmit} style={{
           display: "flex", flexDirection: "column", gap: "25px", maxWidth: "500px", margin: "0 auto"
         }}>
-          <label style={{ color: "#34495e", fontWeight: "bold", fontSize: "18px" }}>Job Type</label>
-          <input
-            type="text"
-            name="jobType"
-            value={formData.jobType}
-            onChange={handleChange}
-            required
-            style={{
-              padding: "14px", borderRadius: "12px", border: "2px solid #3498db", backgroundColor: "#f4f9fc",
-              color: "#2c3e50", fontSize: "16px", transition: "border 0.3s ease"
-            }}
-          />
-
-          <label style={{ color: "#34495e", fontWeight: "bold", fontSize: "18px" }}>Work Experience (years)</label>
-          <input
-            type="text"
-            name="workExperience"
-            value={formData.workExperience}
-            onChange={handleChange}
-            required
-            style={{
-              padding: "14px", borderRadius: "12px", border: "2px solid #3498db", backgroundColor: "#f4f9fc",
-              color: "#2c3e50", fontSize: "16px", transition: "border 0.3s ease"
-            }}
-          />
-
-          <label style={{ color: "#34495e", fontWeight: "bold", fontSize: "18px" }}>Location</label>
-          <input
-            type="text"
-            name="location"
-            value={formData.location}
-            onChange={handleChange}
-            required
-            style={{
-              padding: "14px", borderRadius: "12px", border: "2px solid #3498db", backgroundColor: "#f4f9fc",
-              color: "#2c3e50", fontSize: "16px", transition: "border 0.3s ease"
-            }}
-          />
-
-          <label style={{ color: "#34495e", fontWeight: "bold", fontSize: "18px" }}>Company Type (Startup, MNC, etc.)</label>
-          <input
-            type="text"
-            name="companyType"
-            value={formData.companyType}
-            onChange={handleChange}
-            required
-            style={{
-              padding: "14px", borderRadius: "12px", border: "2px solid #3498db", backgroundColor: "#f4f9fc",
-              color: "#2c3e50", fontSize: "16px", transition: "border 0.3s ease"
-            }}
-          />
+          {["jobType", "workExperience", "location", "companyType"].map((field, idx) => (
+            <React.Fragment key={idx}>
+              <label style={{ color: "#34495e", fontWeight: "bold", fontSize: "18px" }}>
+                {field === "jobType" && "Job Type"}
+                {field === "workExperience" && "Work Experience (years)"}
+                {field === "location" && "Location"}
+                {field === "companyType" && "Company Type (Startup, MNC, etc.)"}
+              </label>
+              <input
+                type="text"
+                name={field}
+                value={formData[field]}
+                onChange={handleChange}
+                required
+                style={{
+                  padding: "14px", borderRadius: "12px", border: "2px solid #3498db", backgroundColor: "#f4f9fc",
+                  color: "#2c3e50", fontSize: "16px", transition: "border 0.3s ease"
+                }}
+              />
+            </React.Fragment>
+          ))}
 
           <button
             type="submit"
@@ -135,6 +107,12 @@ function App() {
             {loading ? <RingLoader size={30} color={"#ffffff"} /> : "Generate Questions"}
           </button>
         </form>
+
+        {loading && questions.length === 0 && (
+          <p style={{ textAlign: "center", color: "#2980b9", marginTop: "20px" }}>
+            ⏳ Generating interview questions... Please wait.
+          </p>
+        )}
 
         {error && <p style={{
           color: "#e74c3c", textAlign: "center", fontWeight: "bold", marginTop: "20px", fontSize: "18px"
