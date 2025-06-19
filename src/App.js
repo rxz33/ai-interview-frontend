@@ -9,13 +9,13 @@ function App() {
     workExperience: "",
     topic: "",
     companyType: "",
+    difficulty: "", // ✅ NEW field
   });
 
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // ✅ Ping backend on first load (prevents cold start delay)
   useEffect(() => {
     axios.get("https://ai-interview-backend-5es5.onrender.com/health")
       .then(() => console.log("✅ Backend warm-up done"))
@@ -96,6 +96,24 @@ function App() {
             </React.Fragment>
           ))}
 
+          {/* ✅ Difficulty Dropdown */}
+          <label style={{ color: "#34495e", fontWeight: "bold", fontSize: "18px" }}>Difficulty</label>
+          <select
+            name="difficulty"
+            value={formData.difficulty}
+            onChange={handleChange}
+            required
+            style={{
+              padding: "14px", borderRadius: "12px", border: "2px solid #3498db", backgroundColor: "#f4f9fc",
+              color: "#2c3e50", fontSize: "16px"
+            }}
+          >
+            <option value="">Select Difficulty</option>
+            <option value="Easy">Easy</option>
+            <option value="Medium">Medium</option>
+            <option value="Hard">Hard</option>
+          </select>
+
           <button
             type="submit"
             disabled={loading}
@@ -135,7 +153,6 @@ function App() {
             </li>
           ))}
         </ul>
-
       </div>
     </div>
   );
