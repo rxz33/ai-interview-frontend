@@ -39,7 +39,7 @@ function App() {
     console.error("❌ Request failed:", err);
 
     if (err.response?.status === 503) {
-      setError("⚠️ Gemini API quota exceeded. Please try again in a few minutes.");
+      setError("⚠️ Backend is unavailable. Possibly Groq API error or rate limit. Please try again shortly.");
     } else if (err.response?.status === 500) {
       setError("⚠️ Internal server error. Try again later or check your inputs.");
     } else {
