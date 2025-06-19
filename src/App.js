@@ -7,7 +7,7 @@ function App() {
   const [formData, setFormData] = useState({
     jobType: "",
     workExperience: "",
-    location: "",
+    topic: "",
     companyType: "",
   });
 
@@ -74,7 +74,7 @@ function App() {
         <form onSubmit={handleSubmit} style={{
           display: "flex", flexDirection: "column", gap: "25px", maxWidth: "500px", margin: "0 auto"
         }}>
-          {["jobType", "workExperience", "location", "companyType"].map((field, idx) => (
+          {["jobType", "workExperience", "topic", "companyType"].map((field, idx) => (
             <React.Fragment key={idx}>
               <label style={{ color: "#34495e", fontWeight: "bold", fontSize: "18px" }}>
                 {field === "jobType" && "Job Type"}
