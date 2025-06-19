@@ -9,12 +9,23 @@ function App() {
     workExperience: "",
     topic: "",
     companyType: "",
-    difficulty: "", // ✅ NEW field
+    difficulty: "", // ✅ NEW
   });
 
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  // ✅ TTS Function
+  const speak = (text) => {
+    const synth = window.speechSynthesis;
+    if (!synth) return alert("Speech synthesis not supported in this browser.");
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.rate = 1;
+    utter.pitch = 1;
+    utter.lang = "en-US";
+    synth.speak(utter);
+  };
 
   useEffect(() => {
     axios.get("https://ai-interview-backend-5es5.onrender.com/health")
@@ -33,12 +44,10 @@ function App() {
     try {
       const response = await axios.post("https://ai-interview-backend-5es5.onrender.com/api/interview-questions", formData);
       const fetchedQuestions = response.data.questions || [];
-
       const updatedQuestions = fetchedQuestions.map((qa) => ({
         question: qa?.question?.trim() || "**Question missing**",
         answer: qa?.answer?.trim() || "**Answer missing**",
       }));
-
       setQuestions(updatedQuestions);
     } catch (err) {
       console.error("❌ Request failed:", err);
@@ -96,7 +105,6 @@ function App() {
             </React.Fragment>
           ))}
 
-          {/* ✅ Difficulty Dropdown */}
           <label style={{ color: "#34495e", fontWeight: "bold", fontSize: "18px" }}>Difficulty</label>
           <select
             name="difficulty"
@@ -144,11 +152,17 @@ function App() {
               backgroundColor: "#ecf6ff", padding: "16px", marginBottom: "12px", borderRadius: "12px", color: "#2c3e50",
               border: "2px solid #3498db", fontSize: "16px", boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)"
             }}>
-              <div style={{ marginBottom: "8px" }}>
-                <strong>Q:</strong> {qa.question}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <span><strong>Q:</strong> {qa.question}</span>
+                <button onClick={() => speak(qa.question)} title="Listen to Question" style={{ background: "none", border: "none", cursor: "pointer", fontSize: "18px", color: "#3498db" }}>
+                  🔊
+                </button>
               </div>
-              <div>
-                <strong>A:</strong> {qa.answer}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "6px" }}>
+                <span><strong>A:</strong> {qa.answer}</span>
+                <button onClick={() => speak(qa.answer)} title="Listen to Answer" style={{ background: "none", border: "none", cursor: "pointer", fontSize: "18px", color: "#3498db" }}>
+                  🔊
+                </button>
               </div>
             </li>
           ))}
