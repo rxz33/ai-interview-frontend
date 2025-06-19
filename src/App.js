@@ -79,7 +79,7 @@ function App() {
               <label style={{ color: "#34495e", fontWeight: "bold", fontSize: "18px" }}>
                 {field === "jobType" && "Job Type"}
                 {field === "workExperience" && "Work Experience (years)"}
-                {field === "location" && "Location"}
+                {field === "topic" && "Topic"}
                 {field === "companyType" && "Company Type (Startup, MNC, etc.)"}
               </label>
               <input
