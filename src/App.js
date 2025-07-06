@@ -39,7 +39,7 @@ function App() {
   };
 
   useEffect(() => {
-    axios.get("https://interq-groq.onrender.com/health")
+    axios.get("https://ai-interview-backend-5es5.onrender.com/health")
       .then(() => console.log("✅ Backend warm-up done"))
       .catch((err) => console.warn("⚠️ Backend warm-up failed", err));
   }, []);
@@ -53,7 +53,7 @@ function App() {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.post("https://interq-groq.onrender.com/api/interview-questions", formData);
+      const response = await axios.post("https://ai-interview-backend-5es5.onrender.com/api/interview-questions", formData);
       const fetchedQuestions = response.data.questions || [];
       const updatedQuestions = fetchedQuestions.map((qa) => ({
         question: qa?.question?.trim() || "**Question missing**",
