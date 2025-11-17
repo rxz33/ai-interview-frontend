@@ -14,27 +14,9 @@ Question difficulty selection (Easy/Medium/Hard)
 Dynamic follow-up and clarification questions
 Secure and scalable backend using Express and MongoDB
 
-Project Structure
-bash
-Copy code
-ai-interview-generator/
-├── backend/             # Express.js API
-│   ├── routes/          # All API routes
-│   ├── controllers/     # Business logic
-│   ├── services/        # Gemini AI integration logic
-│   ├── models/          # Mongoose schemas
-│   └── .env             # API keys & DB credentials (ignored)
-├── frontend/            # React + Tailwind UI
-│   └── src/
-│       └── components/  # Reusable React components
-│       └── pages/       # Page views
-├── .gitignore
-├── package.json
-└── README.md
-
 📄 License
 MIT License © 2025 Rashi
 
-🙋‍♀️ About the Creator
-Made with 💡 by Rashi
-GitHub @rashi-github06
+About the Creator
+Made by Rashi
+GitHub @rxz33
