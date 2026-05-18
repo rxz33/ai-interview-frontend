@@ -1,0 +1,5 @@
+# Frontend .gitignore
+node_modules
+dist
+.env
+.vite
